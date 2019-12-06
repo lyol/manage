@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>系统菜单管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="Shortcut Icon" href="/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="/layui/css/layui.css" media="all">
+    <link rel="stylesheet" type="text/css" href="/css/admin/base.css" media="all">
+    <link rel="stylesheet" type="text/css" href="/css/admin/admin.css" media="all">
+    <style type="text/css">
+    .oms-layer-btn{
+    text-align: center;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    padding-top: 15px;}
+    </style>
+</head>
+
+<body class="larryms-auth larryms-menu larryms-menu-edit">
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+  <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+  <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<div style="height:100%;overflow-y:scroll;">
+    <form class="layui-form layui-form-pane larry-menu-form" id="larrymsAdd" lay-filter="larryMenuAdd" action="/system/menuedit">
+        <input type="hidden" value="{$current_menu.id}" name="id">
+        <input class="layui-input layui-hide" th:value="${menu.id}" name="id">
+        <div class="layui-form-item">
+            <label class="layui-form-label">父级菜单</label>
+            <div class="layui-input-block">
+                <select name="pid" multiple="" lay-verify="required" lay-search="" class="larry-select">
+                        <option th:each="menuDO:${menus}" th:value="${menuDO.id}"
+                            th:text="${menuDO.title}" th:selected="${menu.pid==menuDO.id}"></option>
+                        <option value="0" selected="selected">顶级菜单</option>
+                    </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">菜单类型</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="type" lay-filter='menutype' value="0" title="目录" th:checked="*{menu.type} == '0'" >
+                        <input type="radio" name="type" lay-filter='menutype' value="1" title="导航" th:checked="*{menu.type} == '1'" >
+                        <input type="radio" name="type" lay-filter='menutype' value="2" title="按钮" th:checked="*{menu.type} == '2'" >
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline">
+                    <label class="layui-form-label">是否有子菜单</label>
+                    <div class="layui-input-block">
+                        <input type="radio" name="children" lay-filter='menu' value="1" title="是" th:checked="*{menu.children} == true">
+                        <input type="radio" name="children" lay-filter='menu' value="0" title="否" th:checked="*{menu.children} == false">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">菜单名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="title" placeholder="请输入菜单名称" th:value="${menu.title}" class="layui-input" lay-verify="required" value="" autocomplete="off">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">菜单地址</label>
+                <div class="layui-input-block">
+                    <input type="text" name="url" placeholder="请输入菜单地址" th:value="${menu.url}" class="layui-input" value="" autocomplete="off">
+                </div>
+            </div>
+            <div class="layui-form-item  larryms-menus-icon">
+                <label class="layui-form-label" id="{{d.MENUICON}}"><i id="{{d.MENUICONI}}" class="larry-icon larry-tubiao"></i></label>
+                <div class="layui-input-block">
+                    <input type="text" name="icon" placeholder="请输入选择或输入图标名称" th:value="${menu.icon}" autocomplete="off" class="layui-input" id="{{d.MENUICONINPUT}}" lay-verify="required" value="">
+                </div>
+                <div class="larry-icon-box">
+                    <div class="layui-tab">
+                        <ul class="layui-tab-title">
+                            <li class="layui-this">icon图标</li>
+                        </ul>
+                        <div class="larryms-search">
+                            <input type="text" placeholder="请输入要查找的图标名" class="layui-input search_text" autocomplete="off">
+                            <input type="button" class="inline-block layui-btn layui-btn-sm search_icon" value="搜索">
+                        </div>
+                        <div class="layui-tab-content">
+                            <div class="layui-tab-item layui-show" id="{{d.FONTA}}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">字体名称</label>
+                <div class="layui-input-block">
+                    <input type="text" name="font" placeholder="请输入字体名称,默认使用larry-icon / fa" th:value="${menu.font}" class="layui-input" id="{{d.MENUICONFONT}}" lay-verify="required" value="" autocomplete="off">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">权限标识</label>
+                <div class="layui-input-block">
+                    <input type="text" name="perms" id="perms" th:value="${menu.perms}" placeholder="请输入权限标识 如：user:save 若不限制权限可不输入" class="layui-input" value="" autocomplete="off">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">备注</label>
+                <div class="layui-input-block">
+                    <textarea name="remark" placeholder="请输入该菜单的描述信息" th:text="${menu.remark}" class="layui-textarea" autocomplete="off"></textarea>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <div class="layui-inline" id="spread">
+                    <label class="layui-form-label layui-inline">是否展开</label>
+                    <div class="layui-inline">
+                        <input type="checkbox" name="spread" lay-skin="switch" lay-filter="switchTest" lay-text="展开|折叠" th:checked="${menu.spread}">
+                    </div>
+                </div>
+                <div class="layui-inline">
+                    <label class="layui-form-label layui-inline">状态</label>
+                    <div class="layui-inline">
+                        <input type="checkbox" checked="" name="status" lay-skin="switch" lay-filter="switchTest" lay-text="开启|关闭" th:checked="${menu.status}">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序</label>
+                <div class="layui-input-block">
+                    <input type="number" name="sort" placeholder="请输入排序编号" class="layui-input" lay-verify="required" autocomplete="off" th:value="${menu.sort}">
+                </div>
+            </div>
+            <div class="oms-layer-btn">
+                <a class="layui-btn layui-btn layui-btn-sm left" lay-submit="" lay-filter="menuadd" id="submitAdd">确定</a>
+                <a class="layui-btn layui-btn layui-btn-sm  layui-btn-danger" id="resetAdd">重置</a>
+                <a class="layui-btn layui-btn layui-btn-sm  layui-btn-danger" id="closeAdd">关闭</a>
+            </div>
+        </form>
+    </div>
+    <div class="larry-menu-add" id="menuAddTpl" style="display: none;"></div>
+    <!-- 加载js文件-->
+    <script type="text/javascript" src="/layui/layui.js"></script>
+    <script th:src="${urls.getForLookupPath('/mods/system/menus.js')}"></script>
+    <script type="text/javascript">
+    layui.config({
+        version: "2.0.8",
+        base: '/', //实际使用时，建议改成绝对路径
+        identified: 'menuedit',
+        layertype: 2,
+        rightMenu: true // false关闭，设置为custom时使用自定义，不使用默认menu
+    }).extend({
+        larry: 'js/base'
+    }).use('larry');
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,27 @@
+# 默认的profile为dev，其他环境通过指定启动参数使用不同的profile，比如：  
+#   测试环境：java -jar my-spring-boot.jar --spring.profiles.active=test  
+#   生产环境：java -jar my-spring-boot.jar --spring.profiles.active=pro
+spring: 
+  profiles:
+    #本地尽量不要直连生产，如需连接生产请将跑批相关代码禁用
+    active: dev
+  thymeleaf:
+    cache: false
+    #非严格模式的HTML语法检查
+    mode: LEGACYHTML5
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  mvc:
+    date-format: yyyy-MM-dd HH:mm:ss
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 100MB
+  resources:
+    chain:
+      strategy:
+        content:
+          enabled: true
+          paths: /**

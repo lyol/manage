@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title></title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <link rel="Shortcut Icon" href="/favicon.ico"/>
+    <link rel="stylesheet" type="text/css" href="/larry/css/larry.css" media="all">
+    <link rel="stylesheet" type="text/css" href="/css/admin/base.css" media="all">
+    <link rel="stylesheet" type="text/css" href="/css/admin/console.css">
+
+</head>
+
+<body class="larry-bg-gray">
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
+<div class="layui-fluid larryms-console-data">
+<label>首页</label>
+</div>    
+
+    <!-- 加载js文件-->
+    <script type="text/javascript" src="/layui/layui.js"></script>
+    <!-- <script th:src="${urls.getForLookupPath('/omsjs/')}"></script> -->
+    <script type="text/javascript">
+        /*layui.cache.page = 'console';*/
+        layui.config({
+            version: "2.0.8",
+            base: '/',
+            identified: 'data'
+        }).extend({
+            larry: 'js/base'
+            , echarts: '{/}/lib/extend/echarts'
+            , larryms: '{/}/lib/larryms'
+        }).use(['larry', 'swiper', 'element'], function () {
+            var swiper = layui.swiper,
+                element = layui.element;
+            var mySwiper = new swiper('.swiper-container', {
+                speed: 1000,
+                autoplay: {
+                    delay: 100000,
+                }, //可选选项，自动滑动
+                pagination: {
+                    el: '.swiper-pagination',
+                    bulletElement: 'li',
+                    clickable: true,
+                    effect: 'cube',
+                    cubeEffect: {
+                        slideShadows: true,
+                        shadow: true,
+                        shadowOffset: 100,
+                        shadowScale: 0.6
+                    }
+                },
+            });
+        });
+    </script>
+</body>
+
+</html>
