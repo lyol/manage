@@ -28,7 +28,7 @@ import java.security.spec.X509EncodedKeySpec;
  */
 public class SymmetricKeyEncryptionClient {
 
-    private static final String keyFilePath = "E:/aitou/mydata/secret.key";
+    private static final String keyFilePath = "E:/xx/mydata/secret.key";
 
     public static String getKeyFilePath() {
         URL url = SymmetricKeyEncryptionClient.class.getClassLoader().getResource("secret.key");
@@ -98,13 +98,13 @@ public class SymmetricKeyEncryptionClient {
     }
 
     public static void main(String[] args) {
-        COSCredentials cred = new BasicCOSCredentials("AKIDHUVSC6GqkYDg2CQC7siVFxzUr0BFjMlG", "eCs4BEKAta9iBSaWH2iDxYxBYmojV5JO");
+        COSCredentials cred = new BasicCOSCredentials("secretId", "secretKey");
         ClientConfig clientConfig = new ClientConfig(new Region("ap-shanghai"));
         COSClient cosClient = new COSClient(cred, clientConfig);
         // 方法1 本地文件上传
         String key = "20191127/001/1516002325.jpg";
-        File localFile = new File("E:/aitou/temp/1516002325.jpg");
-        PutObjectResult putObjectResult = cosClient.putObject("layuiadmin-1252932126", key, localFile);
+        File localFile = new File("E:/xx/temp/1516002325.jpg");
+        PutObjectResult putObjectResult = cosClient.putObject("bucketName", key, localFile);
         String etag = putObjectResult.getETag();  // 获取文件的 etag
         System.out.println(etag);
         cosClient.shutdown();
